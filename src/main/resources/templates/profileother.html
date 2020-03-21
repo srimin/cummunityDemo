@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>个人空间</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/community.css"/>
+    <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:replace="~{navigation :: nav}"></div>
+<div class="container-fluid cont">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>[[${sectionName}]]</h2>
+                <hr>
+                <div class="media" th:each="post : ${pageInfoDTO.postsList}">
+                    <div class="media-left media-middle">
+                        <a href="#">
+                            <img class="media-object" th:src="${post.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading" th:text="${post.title}"></h4>
+                        [[${post.content}]]<br/>
+                        <span class="cont-desc">[[${post.commentCount}]]个回复 | [[${post.viewCount}]]次浏览 | [[${#dates.format(post.gmtCreate, 'yyyy-MM-dd HH:mm')}]]</span>
+                    </div>
+                </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li th:if="${pageInfoDTO.page!=1}">
+                            <a th:href="@{'/?page=' + ${pageInfoDTO.page -1}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${pageInfoDTO.page - 2 >=1}"><a th:href="@{'/?page=' + ${pageInfoDTO.page -2}}"
+                                                                   th:text="${pageInfoDTO.page -2}">1</a></li>
+                        <li th:if="${pageInfoDTO.page - 1 >=1}"><a th:href="@{'/?page=' + ${pageInfoDTO.page -1}}"
+                                                                   th:text="${pageInfoDTO.page -1}">1</a></li>
+                        <li class="active"><a href="#" th:text="${pageInfoDTO.page}">1</a></li>
+                        <li th:if="${pageInfoDTO.totalPage - pageInfoDTO.page >=1}"><a
+                                th:href="@{'/?page=' + ${pageInfoDTO.page +1}}" th:text="${pageInfoDTO.page +1}">1</a>
+                        </li>
+                        <li th:if="${pageInfoDTO.totalPage - pageInfoDTO.page >=2}"><a
+                                th:href="@{'/?page=' + ${pageInfoDTO.page +2}}" th:text="${pageInfoDTO.page +2}">1</a>
+                        </li>
+                        <li th:if="${pageInfoDTO.page!=pageInfoDTO.totalPage}">
+                            <a th:href="@{'/?page=' + ${pageInfoDTO.page +1}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <h2>其他信息</h2>
+                <hr>
+                <div class="list-group">
+                    <a th:href="@{'/profile/' + ${session.user.id}}" th:class="${section==null}?'list-group-item active' : 'list-group-item'">
+                        个人资料
+                    </a>
+
+                    <a th:href="@{'/profile/' + ${session.user.id} + '/posts'}" th:class="${section=='myPosts'}?'list-group-item active' : 'list-group-item'">
+                        我发布的贴子
+                    </a>
+                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
