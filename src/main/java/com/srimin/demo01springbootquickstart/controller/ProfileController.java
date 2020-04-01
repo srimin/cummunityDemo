@@ -24,7 +24,7 @@ public class ProfileController {
     @GetMapping("/profile/{userId}")
     public String profile(@PathVariable(name="userId")Integer userId,
                           Model model){
-        User user = userMapper.findById(userId);
+        User user = userMapper.selectByPrimaryKey(userId);
         model.addAttribute("user",user);
         return "profile";
     }
@@ -36,7 +36,7 @@ public class ProfileController {
                               Model model,
                               @RequestParam(name = "page", defaultValue = "1") Integer page,
                               @RequestParam(name = "range", defaultValue = "5") Integer range) {
-        User user = userMapper.findById(userId);
+        User user = userMapper.selectByPrimaryKey(userId);
         //User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             return "redirect:/";

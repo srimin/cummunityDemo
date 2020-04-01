@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+<!--    <classPathEntry location="D:\Maven\repository\mysql\mysql-connector-java\5.1.48\mysql-connector-java-5.1.48.jar" />-->
+    <properties resource="application.properties"/>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                        connectionURL="${spring.datasource.url}"
+                        userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.srimin.demo01springbootquickstart.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.srimin.demo01springbootquickstart.mapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <table schema="DB2ADMIN" tableName="user" domainObjectName="User" >
+
+        </table>
+        <table schema="DB2ADMIN" tableName="posts" domainObjectName="Posts" >
+
+        </table><table schema="DB2ADMIN" tableName="comment" domainObjectName="Comment" >
+
+        </table>
+
+    </context>
+</generatorConfiguration>

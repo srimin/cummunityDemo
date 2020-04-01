@@ -4,6 +4,7 @@ import com.srimin.demo01springbootquickstart.dto.AccessTokenDTO;
 import com.srimin.demo01springbootquickstart.dto.GitHubUser;
 import com.srimin.demo01springbootquickstart.mapper.UserMapper;
 import com.srimin.demo01springbootquickstart.model.User;
+import com.srimin.demo01springbootquickstart.model.UserExample;
 import com.srimin.demo01springbootquickstart.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -45,7 +47,11 @@ public class AuthorizeController {
         System.out.println("githubUser："+githubUser);
         if (githubUser != null && githubUser.getId() != null)
         {
-            User user = userMapper.findByAccountId(String.valueOf(githubUser.getId()));
+            UserExample userExample = new UserExample();
+            userExample.createCriteria()
+                    .andAccountIdEqualTo(String.valueOf(githubUser.getId()));
+            List<User> users = userMapper.selectByExample(userExample);
+            User user = users.get(0);
             if (user == null){
                 user = new User();
                 user.setToken(UUID.randomUUID().toString());
@@ -61,7 +67,10 @@ public class AuthorizeController {
                 user.setGmtModified(System.currentTimeMillis());
                 user.setBio(githubUser.getBio());
                 user.setAvatarUrl(githubUser.getAvatarUrl());
-                userMapper.update(user);
+                UserExample example = new UserExample();
+                example.createCriteria()
+                        .andAccountIdEqualTo(user.getAccountId());
+                userMapper.updateByExampleSelective(user, example);
             }
             response.addCookie(new Cookie("token",user.getToken()));
             return "redirect:/";

@@ -9,7 +9,7 @@ body {
 
 .btn-publish {
     float: right;
-    margin-bottom: 15px;
+    margin: 15px 0;
 }
 
 .media-object {
@@ -20,5 +20,29 @@ body {
 .cont-desc {
     font-size: 10px;
     font-weight: normal;
-    color: #999999;
+    color: #999;
+}
+.avatar{
+    width: 64px;
+    height: 64px;
+}
+
+.comment{
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 7px;
+    clear: both;
+}
+
+.menu{
+    margin-top: 20px;
+}
+
+.menu .icon{
+    margin-right: 5px;
+    font-size: 15px;
+    color: #999;
+    cursor: pointer;
+}
+.menu .icon:hover{
+    color: lightpink;
 }

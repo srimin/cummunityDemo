@@ -1,7 +1,10 @@
 package com.srimin.demo01springbootquickstart.controller;
 
+import com.srimin.demo01springbootquickstart.exception.CustomizeErrorCode;
+import com.srimin.demo01springbootquickstart.exception.CustomizeException;
 import com.srimin.demo01springbootquickstart.mapper.PostsMapper;
 import com.srimin.demo01springbootquickstart.model.Posts;
+import com.srimin.demo01springbootquickstart.model.PostsExample;
 import com.srimin.demo01springbootquickstart.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,7 +56,7 @@ public class PublishController {
             model.addAttribute("error","用户未登录");
             return "/publish";
         }
-        Posts posts = postsMapper.getById(id);
+        Posts posts = postsMapper.selectByPrimaryKey(id);
         if(posts == null){
             posts = new Posts();
             posts.setTitle(title);
@@ -62,20 +65,26 @@ public class PublishController {
             posts.setCreator(user.getId());
             posts.setGmtCreate(System.currentTimeMillis());
             posts.setGmtModified(posts.getGmtCreate());
-            postsMapper.create(posts);
+            postsMapper.insertSelective(posts);
         }else{
             posts.setTitle(title);
             posts.setContent(content);
             posts.setTag(tag);
             posts.setGmtModified(System.currentTimeMillis());
-            postsMapper.update(posts);
+            PostsExample example = new PostsExample();
+            example.createCriteria()
+                    .andIdEqualTo(posts.getId());
+            int state = postsMapper.updateByExampleSelective(posts, example);
+            if (state != 1){
+                throw new CustomizeException(CustomizeErrorCode.POSTS_NOT_FOUND);
+            }
         }
         return "redirect:/";
     }
 
     @GetMapping(value = "/publish/{id}")
     public String edit(@PathVariable(name = "id")Integer id, Model model){
-        Posts posts = postsMapper.getById(id);
+        Posts posts = postsMapper.selectByPrimaryKey(id);
         model.addAttribute("title",posts.getTitle());
         model.addAttribute("content",posts.getContent());
         model.addAttribute("tag",posts.getTag());

@@ -18,7 +18,7 @@ public class GithubProvider {
                 .post(body)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            String str = response.body().string();
+            String str = response.body().string();//会超时
             //str = access_token=5c20f20c461a6fb1321d56a28bc5e640fa69171b&scope=user&token_type=bearer
             return str.split("&")[0].split("=")[1];//分割得到token
         } catch (Exception e) {
